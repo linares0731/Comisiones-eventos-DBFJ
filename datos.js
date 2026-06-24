@@ -1,5 +1,5 @@
 window.DATOS_COMISIONES = {
-  "actualizado": "2026-06-24 14:52",
+  "actualizado": "2026-06-24 15:03",
   "comisiones": [
     {
       "codigo": "19001",
