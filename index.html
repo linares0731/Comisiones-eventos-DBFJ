@@ -387,7 +387,6 @@
       </div>
       <div>
         <h1>Comisiones y Eventos. Delegada para el Buen Futuro de las Juventudes y la Protección del Derecho al Deporte.</h1>
-        <div class="count">Seguimiento territorial de viajes realizados, eventos previstos y diagnósticos.</div>
       </div>
     </div>
     <div class="updated" id="updated"></div>
@@ -421,7 +420,7 @@
         <div id="mapComisiones" class="map"></div>
         <div class="table-wrap">
           <div class="table-title">
-            <span>Tabla resumen de comisiones</span>
+            <span>Resumen comisiones</span>
             <span id="commissionTableCount"></span>
           </div>
           <div class="summary-scroll">
@@ -458,7 +457,7 @@
         <div id="mapEventos" class="map"></div>
         <div class="table-wrap">
           <div class="table-title">
-            <span>Tabla resumen de eventos</span>
+            <span>Resumen de eventos</span>
             <span id="eventTableCount"></span>
           </div>
           <div class="summary-scroll">
@@ -483,7 +482,7 @@
     <section class="diagnostics">
       <div class="diagnostics-head">
         <div>
-          <h2>Diagnósticos desarrollados</h2>
+          <h2>Fichas diagnósticas disponibles</h2>
           <div class="count" id="diagnosticsCount"></div>
         </div>
       </div>
@@ -618,7 +617,9 @@
           keepInView: true
         }).addTo(comisionLayer);
       });
-      document.getElementById("comisionesCount").textContent = `${filtradas.length} comisión(es) mostrada(s)`;
+      document.getElementById("comisionesCount").textContent = filtradas.length === 1
+        ? "1 comisión mostrada"
+        : `${filtradas.length} comisiones mostradas`;
       pintarTablaComisiones(filtradas);
     }
 
@@ -644,9 +645,11 @@
       const regionalesUnicas = new Set(filas.map((d) => nombrePlano(d.regional)).filter(Boolean)).size;
       foot.innerHTML = `
         <tr><td>Total de comisiones</td><td colspan="5">${fmtNumero(filas.length)}</td></tr>
-        <tr><td>Regionales únicas visitadas</td><td colspan="5">${fmtNumero(regionalesUnicas)}</td></tr>
+        <tr><td>Regionales visitadas</td><td colspan="5">${fmtNumero(regionalesUnicas)}</td></tr>
       `;
-      document.getElementById("commissionTableCount").textContent = `${fmtNumero(filas.length)} registro(s)`;
+      document.getElementById("commissionTableCount").textContent = filas.length === 1
+        ? "1 registro"
+        : `${fmtNumero(filas.length)} registros`;
     }
 
     function pintarEventos() {
@@ -686,7 +689,9 @@
           keepInView: true
         }).addTo(eventoLayer);
       });
-      document.getElementById("eventosCount").textContent = `${filtrados.length} evento(s) mostrado(s)`;
+      document.getElementById("eventosCount").textContent = filtrados.length === 1
+        ? "1 evento mostrado"
+        : `${filtrados.length} eventos mostrados`;
       pintarTablaEventos(filtrados);
     }
 
@@ -717,7 +722,9 @@
           <td>${fmtDinero(presupuestoRealTotal)}</td>
         </tr>
       `;
-      document.getElementById("eventTableCount").textContent = `${fmtNumero(filas.length)} registro(s)`;
+      document.getElementById("eventTableCount").textContent = filas.length === 1
+        ? "1 registro"
+        : `${fmtNumero(filas.length)} registros`;
     }
 
     function pintarDiagnosticos() {
@@ -733,7 +740,9 @@
         li.appendChild(a);
         lista.appendChild(li);
       });
-      document.getElementById("diagnosticsCount").textContent = `${datos.diagnosticos.length} ficha(s) disponibles`;
+      document.getElementById("diagnosticsCount").textContent = datos.diagnosticos.length === 1
+        ? "1 ficha disponible"
+        : `${datos.diagnosticos.length} fichas disponibles`;
     }
 
     document.getElementById("yearFilter").addEventListener("change", pintarComisiones);
