@@ -1,5 +1,5 @@
 window.DATOS_COMISIONES = {
-  "actualizado": "2026-06-24 15:03",
+  "actualizado": "2026-06-24 15:31",
   "comisiones": [
     {
       "codigo": "19001",
@@ -3086,22 +3086,6 @@ window.DATOS_COMISIONES = {
       "presupuestoTotal": 886980.0,
       "presupuestoReal": null,
       "diferencia": 886980.0
-    },
-    {
-      "codigo": "",
-      "municipio": "Por definir",
-      "departamento": "",
-      "lat": null,
-      "lng": null,
-      "mes": null,
-      "mesNombre": "",
-      "evento": "",
-      "responsable": "",
-      "participacionEsperada": null,
-      "presupuestoEstimadoTipo": null,
-      "presupuestoTotal": null,
-      "presupuestoReal": 157702268.63,
-      "diferencia": null
     }
   ],
   "diagnosticos": [
@@ -3143,6 +3127,6 @@ window.DATOS_COMISIONES = {
   ],
   "meta": {
     "comisionesSinCoordenadas": 0,
-    "eventosSinCoordenadas": 19
+    "eventosSinCoordenadas": 18
   }
 };
