@@ -682,6 +682,8 @@
 
       eventoLayer.clearLayers();
       const eventosConMunicipioConfirmado = filtrados.filter((d) =>
+        d.lat !== null && d.lat !== undefined && d.lat !== "" &&
+        d.lng !== null && d.lng !== undefined && d.lng !== "" &&
         Number.isFinite(Number(d.lat)) && Number.isFinite(Number(d.lng))
       );
       agrupar(eventosConMunicipioConfirmado).forEach((grupo) => {
