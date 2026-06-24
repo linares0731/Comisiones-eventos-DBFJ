@@ -465,6 +465,7 @@
               <thead>
                 <tr>
                   <th>Mes</th>
+                  <th>Municipio</th>
                   <th>Participación esperada</th>
                   <th>Responsable</th>
                   <th>Presupuesto estimado por tipo de evento</th>
@@ -511,6 +512,8 @@
 
     let comisionLayer = L.layerGroup().addTo(mapComisiones);
     let eventoLayer = L.layerGroup().addTo(mapEventos);
+    let municipioEventoSeleccionado = null;
+    let eventosFiltradosPorMes = [];
 
     const fmtFecha = (iso) => {
       if (!iso) return "Sin fecha";
@@ -655,11 +658,14 @@
     function pintarEventos() {
       const month = document.getElementById("eventMonthFilter").value;
       const filtrados = datos.eventos.filter((d) => month === "todos" || d.mesNombre === month);
+      eventosFiltradosPorMes = filtrados;
+      municipioEventoSeleccionado = null;
 
       eventoLayer.clearLayers();
       agrupar(filtrados).forEach((grupo) => {
         const total = grupo.items.length;
         const d = grupo.items[0];
+        const claveMunicipio = d.codigo || `${d.lat},${d.lng}`;
         const detalle = grupo.items.slice(0, 4).map((item) => `
           <strong>${escapeHtml(item.municipio)}${total > 1 ? ` (${total})` : ""}</strong>
           <dl>
@@ -672,7 +678,7 @@
           </dl>
         `).join("<hr>");
         const contenido = `<div class="tip">${detalle}</div>`;
-        L.circleMarker([d.lat, d.lng], {
+        const marcador = L.circleMarker([d.lat, d.lng], {
           radius: Math.min(8 + total * 1.3, 22),
           color: "#275f91",
           weight: 2,
@@ -687,7 +693,18 @@
           maxWidth: 360,
           autoPan: true,
           keepInView: true
-        }).addTo(eventoLayer);
+        });
+        marcador.on("click", () => {
+          municipioEventoSeleccionado = claveMunicipio;
+          pintarTablaEventos(grupo.items);
+        });
+        marcador.on("popupclose", () => {
+          if (municipioEventoSeleccionado === claveMunicipio) {
+            municipioEventoSeleccionado = null;
+            pintarTablaEventos(eventosFiltradosPorMes);
+          }
+        });
+        marcador.addTo(eventoLayer);
       });
       document.getElementById("eventosCount").textContent = filtrados.length === 1
         ? "1 evento mostrado"
@@ -704,6 +721,7 @@
       body.innerHTML = filas.map((d) => `
         <tr>
           <td>${escapeHtml(d.mesNombre || "Sin dato")}</td>
+          <td>${escapeHtml(d.municipio || "Sin dato")}</td>
           <td>${fmtNumero(d.participacionEsperada)}</td>
           <td>${escapeHtml(d.responsable || "Sin dato")}</td>
           <td>${fmtDinero(d.presupuestoEstimadoTipo)}</td>
@@ -711,11 +729,12 @@
         </tr>
       `).join("");
       if (!filas.length) {
-        body.innerHTML = `<tr><td colspan="5">No hay eventos para los filtros seleccionados.</td></tr>`;
+        body.innerHTML = `<tr><td colspan="6">No hay eventos para los filtros seleccionados.</td></tr>`;
       }
       foot.innerHTML = `
         <tr>
           <td>Total eventos: ${fmtNumero(filas.length)}</td>
+          <td></td>
           <td>${fmtNumero(participacionTotal)}</td>
           <td></td>
           <td>${fmtDinero(presupuestoTipoTotal)}</td>
