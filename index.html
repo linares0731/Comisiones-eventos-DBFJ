@@ -132,6 +132,13 @@
       justify-content: end;
     }
 
+    .filter-note {
+      max-width: 210px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
     label {
       display: grid;
       gap: 4px;
@@ -156,6 +163,16 @@
       height: 430px;
       min-height: 430px;
       background: #e9efea;
+    }
+
+    .map-note {
+      margin: 0;
+      padding: 10px 16px;
+      border-top: 1px solid var(--line);
+      background: #f5f8fb;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
     }
 
     .table-wrap {
@@ -415,6 +432,7 @@
                 <option value="3">Cuatrimestre 3</option>
               </select>
             </label>
+            <div class="filter-note">Tenga presente la opción seleccionada en Mes cuando haga uso del filtro de cuatrimestre.</div>
           </div>
         </div>
         <div id="mapComisiones" class="map"></div>
@@ -455,6 +473,7 @@
           </div>
         </div>
         <div id="mapEventos" class="map"></div>
+        <p class="map-note">El mapa solo marca aquellos eventos en los que se ya se confirmó municipio de ocurrencia, lo que no representa el total de eventos pensados por la Delegada. Para ver la totalidad de eventos filtre por Todos en mes y diríjase a la tabla.</p>
         <div class="table-wrap">
           <div class="table-title">
             <span>Resumen de eventos</span>
@@ -662,7 +681,10 @@
       municipioEventoSeleccionado = null;
 
       eventoLayer.clearLayers();
-      agrupar(filtrados).forEach((grupo) => {
+      const eventosConMunicipioConfirmado = filtrados.filter((d) =>
+        Number.isFinite(Number(d.lat)) && Number.isFinite(Number(d.lng))
+      );
+      agrupar(eventosConMunicipioConfirmado).forEach((grupo) => {
         const total = grupo.items.length;
         const d = grupo.items[0];
         const claveMunicipio = d.codigo || `${d.lat},${d.lng}`;
